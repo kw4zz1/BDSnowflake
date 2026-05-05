@@ -1,18 +1,18 @@
 services:
   postgres:
     image: postgres:15
-    container_name: snowflake_db_lab
+    container_name: ${CONTAINER_NAME:-snowflake_db_lab}
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: petstore
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-petstore}
     ports:
-      - "5433:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - ./sql-scripts:/docker-entrypoint-initdb.d
       - ./исходные данные:/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d petstore"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-petstore}"]
       interval: 10s
       timeout: 5s
       retries: 5
